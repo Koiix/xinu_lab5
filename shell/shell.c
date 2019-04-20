@@ -260,7 +260,7 @@ process	shell (
 
 		/* Parse input line and divide into tokens */
 		ntok = lexan(buf, len, tokbuf, &tlen, tok, toktyp);
-		fprintf(dev, "TOKBUFF CONTENTS: %s\n", tokbuf);
+		dump_tokens(tok, tokbuf, ntok, buf);
 		/* Handle parsing error */
 		if (ntok == SYSERR) {
 			fprintf(dev,"%s (parsing)\n", SHELL_SYNERRMSG);
