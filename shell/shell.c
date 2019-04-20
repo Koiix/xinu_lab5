@@ -211,11 +211,11 @@ process	shell (
     did32	dev		/* ID of tty device from which	*/
 	)				/*   to accept commands		*/
 {
-    char	buf[SHELL_BUFLEN];
-	int32	len;
-	char	tokbuf[SHELL_BUFLEN + SHELL_MAXTOK];
-	int32	tlen;
-	int32	tok[SHELL_MAXTOK];
+  char	buf[SHELL_BUFLEN];									 /* comment */
+	int32	len;																  /* all */
+	char	tokbuf[SHELL_BUFLEN + SHELL_MAXTOK]; /* your */	/* how is this formatted?? */
+	int32	tlen; 															/* fucking */
+	int32	tok[SHELL_MAXTOK]; 									/* lines! */
 
 	int32	toktyp[SHELL_MAXTOK];	/* Type of each token in tokbuf	*/
 	int32	ntok;			/* Number of tokens on line	*/
@@ -260,7 +260,7 @@ process	shell (
 
 		/* Parse input line and divide into tokens */
 		ntok = lexan(buf, len, tokbuf, &tlen, tok, toktyp);
-
+		fprintf(dev, "TOKBUFF CONTENTS: %s\n", tokbuf);
 		/* Handle parsing error */
 		if (ntok == SYSERR) {
 			fprintf(dev,"%s (parsing)\n", SHELL_SYNERRMSG);
