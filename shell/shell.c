@@ -260,9 +260,9 @@ process	shell (
 
 		/* Parse input line and divide into tokens */
 		ntok = lexan(buf, len, tokbuf, &tlen, tok, toktyp);
-		char buf[1000];
-		dump_tokens(tok, tokbuf, ntok, buf);
-		fprintf(dev,"%s\n", buf);
+		char dump[1000];
+		dump_tokens(tok, tokbuf, ntok, dump);
+		fprintf(dev,"%s\n", dump);
 		/* Handle parsing error */
 		if (ntok == SYSERR) {
 			fprintf(dev,"%s (parsing)\n", SHELL_SYNERRMSG);
