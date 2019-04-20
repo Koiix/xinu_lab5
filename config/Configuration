@@ -104,9 +104,6 @@ nam:
 		-w ioerr 	-s ioerr 	-n ioerr
 		-intr ioerr
 
-/* type of pipe device */
-pip:
-
 	/* Lab 5: add device I/O handler functions for pipes here */
 pip:
 	on xsh
