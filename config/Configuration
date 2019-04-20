@@ -108,6 +108,12 @@ nam:
 pip:
 
 	/* Lab 5: add device I/O handler functions for pipes here */
+pip:
+	on xsh
+		-i ionull  -o ionull  -c ionull
+		-r pipread  -g pipgetc  -p pipputc
+		-w pipwrite  -s ioerr  -n ioerr
+		-intr ionull
 
 %%
 
@@ -165,7 +171,17 @@ pip:
    LFILE5 is lfl on lfs
 
 	/* Lab 5: add 10 pipe devices here */
-	
+
+	PIPELINE0 is pip on xsh
+	PIPELINE1 is pip on xsh
+	PIPELINE2 is pip on xsh
+	PIPELINE3 is pip on xsh
+	PIPELINE4 is pip on xsh
+	PIPELINE5 is pip on xsh
+	PIPELINE6 is pip on xsh
+	PIPELINE7 is pip on xsh
+	PIPELINE8 is pip on xsh
+	PIPELINE9 is pip on xsh
 
 %%
 
