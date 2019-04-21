@@ -141,8 +141,10 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
         }
     }
 
-    int cur = 0;
-    int next_cur = 0;
+		did32 pipe;	/* where to read/write standard input for current simple commands with pipe */
+		pid32 reader, writer; /* Used to store reader/writer for pipes */
+    int cur = 0;	/* current token index */
+    int next_cur = 0;	/* next token index (lookahead)*/
 
     dump_tokens(tok, tokbuf, ntok, "non-built-in");
 
@@ -173,9 +175,29 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
                                SHELL_CMDSTK, SHELL_CMDPRIO,
                                cmdtab[cmdtab_index].cname, 2, num_args, &tmparg);
 
-            /* Set stdinput and stdoutput in child to redirect I/O */
-            proctab[childs[cur]].prdesc[0] = stdinput;
-            proctab[childs[cur]].prdesc[1] = stdoutput;
+						 /* if previous token was pipe, redirect input to already created pipe */
+						 if(!(cur <= 0) && toktyp[cur-1] == SH_TOK_STICK){
+						 	reader = childs[cur];
+							proctab[childs[cur]].prdesc[0] = pipe;
+							/* Connect pipe after writer, previous simple command proc, and reader, current simple command proc,
+							have been saved and our known. The reader always comes last, so this block will do connecting. */
+						 	pipconnect(pipe, writer, reader);
+						 }else{
+						 		proctab[childs[cur]].prdesc[0] = stdinput;
+						 }
+
+						/* Check if next token if pipe, if so, advance next token and redirect output */
+						if(!(next_cur >= ntok) && toktyp[next_cur] == SH_TOK_STICK){
+							/* The writer always comes first, so this block will do the creating */
+							pipe = pipcreate();	/* Create new pipe */
+							writer = childs[cur];
+							proctab[childs[cur]].prdesc[1] = pipe;
+							next_cur++;
+						/* if no pipe in lookahead, write to stdoutput */
+						}else{
+							proctab[childs[cur]].prdesc[1] = stdoutput;
+						}
+
 
             /* If creation or argument copy fails, report error */
             if ((childs[cur] == SYSERR) ||
@@ -187,7 +209,10 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 			fprintf(dev,"%s (parsing)\n", SHELL_SYNERRMSG);
             return false;
         }
+
+				/* advance to next simple command */
         cur = next_cur;
+
     }
 
     for (int i=0; i<SHELL_MAXTOK; i++) {
@@ -213,12 +238,14 @@ process	shell (
 {
   char	buf[SHELL_BUFLEN];									 /* comment */
 	int32	len;																  /* all */
-	char	tokbuf[SHELL_BUFLEN + SHELL_MAXTOK]; /* your */	/* how is this formatted?? */
-	int32	tlen; 															/* fucking */
-	int32	tok[SHELL_MAXTOK]; 									/* lines! */
+
+	char	tokbuf[SHELL_BUFLEN + SHELL_MAXTOK]; /* holds content of tokens */
+	int32	tlen; 															/* length of tokbuff */
+
+	int32	tok[SHELL_MAXTOK]; 	/* maps token i to index in tokbuff */
+	int32	ntok;	/* Number of tokens on line	*/
 
 	int32	toktyp[SHELL_MAXTOK];	/* Type of each token in tokbuf	*/
-	int32	ntok;			/* Number of tokens on line	*/
 	bool8	backgnd;		/* Run command in background?	*/
 	char	*outname, *inname;	/* Pointers to strings for file	*/
 	did32	stdinput, stdoutput;	/* Descriptors for redirected	*/
@@ -260,9 +287,7 @@ process	shell (
 
 		/* Parse input line and divide into tokens */
 		ntok = lexan(buf, len, tokbuf, &tlen, tok, toktyp);
-		char dump[1000];
-		dump_tokens(tok, tokbuf, ntok, dump);
-		fprintf(dev,"%s\n", dump);
+
 		/* Handle parsing error */
 		if (ntok == SYSERR) {
 			fprintf(dev,"%s (parsing)\n", SHELL_SYNERRMSG);
@@ -276,7 +301,7 @@ process	shell (
 			continue;
 		}
 
-        dump_tokens(tok, tokbuf, ntok, "after-parsing");
+    dump_tokens(tok, tokbuf, ntok, "after-parsing");
 
 		/* If last token is '&', set background */
 		if (toktyp[ntok-1] == SH_TOK_AMPER) {

@@ -13,7 +13,12 @@ enum pipe_state_t {
 struct pipe_t {
 	pipid32 pipid;			    // Pipe ID
 	enum pipe_state_t state;	// Pipe state defined by the enum
-    // LAB2: TODO: Fill the structure with the fields as required.
+	pid32 reader;
+	pid32 writer;
+	sid32 w_sem;
+	sid32 r_sem;
+	char[PIPE_SIZE] data;
+
 };
 
 extern struct pipe_t pipe_tables[MAXPIPES];	// Table for all pipes
