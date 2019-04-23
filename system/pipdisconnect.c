@@ -5,10 +5,13 @@ status pipdisconnect(did32 devpipe) {
 	if(isbadpipe(devpipe)){
 		return SYSERR;
 	}
-  if(pipe_table[devpipe] != PIPE_CONNECTED){
+	pipe_t pipe = pipetable[devtab[devpipe].dvminor];
+  if(pipe.state != PIPE_CONNECTED || (pipe.reader != currpid && pipe.writer != currpid)){
 		return SYSERR;
 	}
-	pipe_table[devpipe] = PIPE_USED;
+	pipe.state = PIPE_USED;
+	pipe.reader = -1;
+	pipe.writer = -1;
 	enable(mask);
 	return OK;
 }
