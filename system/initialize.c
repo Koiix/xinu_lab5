@@ -45,10 +45,10 @@ pid32	currpid;		/* ID of currently executing process	*/
  */
 
 void	nulluser()
-{	
+{
 	struct	memblk	*memptr;	/* Ptr to memory block		*/
 	uint32	free_mem;		/* Total amount of free memory	*/
-	
+
 	/* Initialize the system */
 
 	sysinit();
@@ -163,9 +163,9 @@ static	void	sysinit()
 	/* Initialize the interrupt vectors */
 
 	initevec();
-	
+
 	/* Initialize free memory list */
-	
+
 	meminit();
 
 	/* Initialize system variables */
@@ -188,7 +188,7 @@ static	void	sysinit()
 		prptr->prprio = 0;
 	}
 
-	/* Initialize the Null process entry */	
+	/* Initialize the Null process entry */
 
 	prptr = &proctab[NULLPROC];
 	prptr->prstate = PR_CURR;
@@ -198,7 +198,17 @@ static	void	sysinit()
 	prptr->prstklen = NULLSTK;
 	prptr->prstkptr = 0;
 	currpid = NULLPROC;
-	
+
+	/* Initialize pipes */
+	for(i = 0; i < PIPE_MAX; i++){
+		pipeptr = &pipe_table[i];
+		pipeptr->state = PIPE_FREE;
+		pipeptr->owner = -1;
+		pipeptr->reader = -1;
+		pipeptr->writer = -1;
+		pipeptr->head = pipeptr->tail = -1;
+	}
+
 	/* Initialize semaphores */
 
 	for (i = 0; i < NSEM; i++) {

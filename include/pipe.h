@@ -27,7 +27,6 @@ struct pipe_t {
 	char[PIPE_SIZE] data;	//Data stored in pipe
 	int32 head;	//Head for circular buffer
 	int32 tail;	//Tail for circular buffer
-	int32 datasize;
 };
 
 extern struct pipe_t pipe_table[MAXPIPES];	// Table for all pipes
