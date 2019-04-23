@@ -12,12 +12,12 @@ devcall pipgetc(struct dentry *devptr) {
 
     char ch;  //char to return
 
-    wait(empty_sem);
+    wait(pipe.to_read);
 
-    tail = (tail+1)%PIPE_SIZE;
-    ch = data[tail];
+    pipe.tail = (pipe.tail+1)%PIPE_SIZE;
+    ch = pipe.data[pipe.tail];
 
-    signal(full_sem);
+    signal(pipe.to_write);
 
     enable(mask);
     return OK;

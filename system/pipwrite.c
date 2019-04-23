@@ -11,16 +11,14 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
     return SYSERR;
   }
 
-  wait(w_lock);
-
   int32 numwrite;
   for(numwrite = 0; numwrite < len; numwrite++){
-    if(pipputc() == SYSERR){
-      return SYSERR;
-    }
+    wait(pipe.to_write);
+    pipe.head = (pipe.head+1)%PIPE_SIZE;
+    pipe.data[pipe.head] = ch;
+    signal(pipe.to_read);
   }
 
-  signal(w_lock);
   enable(mask);
-  return OK;
+  return numwrite;
 }

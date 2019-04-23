@@ -1,0 +1,22 @@
+Reading trouble, block or unblock?
+
+What if other process calls kill on proc? 
+should pipe still get deleted? 
+how do I delete pipe on kill and at the same time only make sure pipe only is deleted by owner process?
+Kill can be called by more than just process that is being killed, more than suicide.
+Disconnect also requires the disconnector be either the reader or the writer, but kill will probably not be called by reader or writer. Perhaps, more than just the creator should be able to call delete on this pipe... ?
+
+How do i ensure on disconnect that reader reads till pipe is empty?
+
+What is meant by cleanup pipe?
+
+Better for pipid to be device number, not index. Why would index help? 
+That being said, What is pipid? is devpipe the index in the pipe_table? or is it the device number?
+devpipe is device number
+
+Index in pipe_table = device minor number?
+
+Shouldn't pipcreate return the device number, not the pipid? should return device number
+
+Why are only 2 semaphores necessary? empty sem and full sem only?
+ 

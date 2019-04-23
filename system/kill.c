@@ -32,6 +32,16 @@ syscall	kill(
 		close(prptr->prdesc[i]);
 	}
 
+	for(i = 0; i < PIPE_MAX; i++){
+		/* if killing pipe owner, delete the pipe */
+		if(pipe_table[i].owner == pid){
+			pipdelete(pipe_table[i].pipid);
+		}
+		if(pipe_table[i].reader == pid || pipe_table[i].writer == pid){
+			pipdisconnect(pipe_table[i].pipid);
+		}
+	}
+
 	freestk(prptr->prstkbase, prptr->prstklen);
 
 	switch (prptr->prstate) {

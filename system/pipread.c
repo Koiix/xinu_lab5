@@ -9,21 +9,18 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	if(pipe.state != CONNECTED || pipe.reader!=currpid){
 		return SYSERR;
 	}
-	wait(r_lock);
 
 	int32 numread;
-	char ch;
 
 	for(numread = 0; numread < len; i++){
-		if((ch = pipgetc())==SYSERR){
-			signal(r_lock);
-			enable(mask);
-			return SYSERR;
-		}
-		*(buf+numread) = ch;
+		wait(pipe.to_read);
+		pipe.tail = (pipe.tail+1)%PIPE_SIZE;
+    *(buf+numread) = pipe.data[pipe.tail];
+		signal(pipe.to_write);
+		if((pipe.head - pipe.tail)==0)
+			break;
 	}
 
-	signal(r_lock);
 	enable(mask);
-	return i;
+	return numread;
 }

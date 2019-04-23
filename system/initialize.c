@@ -200,12 +200,12 @@ static	void	sysinit()
 	currpid = NULLPROC;
 
 	/* Initialize pipes */
+
 	for(i = 0; i < PIPE_MAX; i++){
 		pipeptr = &pipe_table[i];
 		pipeptr->state = PIPE_FREE;
 		pipeptr->owner = -1;
-		pipeptr->reader = -1;
-		pipeptr->writer = -1;
+		pipeptr->reader = pipeptr->writer = -1;
 		pipeptr->head = pipeptr->tail = -1;
 	}
 

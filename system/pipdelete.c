@@ -8,14 +8,14 @@ status pipdelete(did32 devpipe) {
 	}
 	pipe_t pipe = pipe_table[devtab[devpipe].dvminor]; //extracts pipe_t
 	if(pipe.state == PIPE_FREE || pipe.owner != currpid){
-		return SYSERR
+		return SYSERR;
 	}
-	if(pipe.state == PIPE_CONNECTED){
-		pipdisconnect(devpipe);
-	}
-	pipe.owner = -1;
+	pipe.pipid = -1;
+	pipe.owner = pipe.reader = pipe.writer= -1;
 	semdelete(pipe.empty_sem);
 	semdelete(pipe.full_sem);
+	semdelete(pipe.r_lock);
+	semdelete(pipe.w_lock);
 	pipe.head = pipe.tail = -1;
 	pipe.state = PIPE_FREE;
 

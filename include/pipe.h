@@ -4,7 +4,7 @@
 #define PIPE_SIZE 1024
 
 
-#define isbadpipe(f)  ( ((f) < NDEVS - Npip) | ((f) >= NDEVS) )
+#define isbadpipe(f)  ( ((f) < PIPELINE0) | ((f) >= PIPELINE0+MAX_PIPES) )
 
 enum pipe_state_t {
 	PIPE_FREE,
@@ -19,11 +19,9 @@ struct pipe_t {
 	enum pipe_state_t state;	// Pipe state defined by the enum
 	pid32 owner; //Process ID of pipe owner, only owner creates/deletes
 	pid32 reader;	//Process ID of reading process
-	pid32 writer;	//Process ID of writing process
-	sid32 r_lock;	//Semaphore for reader to wait on
-	sid32 w_lock;  //Semaphore for writer to wait on
-	sid32 empty_sem;	//semaphore that tells when buffer is empty
-	sid32 full_sem;	//semaphore that tells when buffer is full
+	pid32 writer;	//Process ID of writing processs
+	sid32 to_read;	//semaphore that tells when buffer is empty
+	sid32 to_write;	//semaphore that tells when buffer is full
 	char[PIPE_SIZE] data;	//Data stored in pipe
 	int32 head;	//Head for circular buffer
 	int32 tail;	//Tail for circular buffer

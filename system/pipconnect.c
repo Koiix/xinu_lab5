@@ -9,9 +9,9 @@ status pipconnect(did32 devpipe , pid32 writer, pid32 reader) {
   if(pipe.state == PIPE_CONNECTED || pipe.state == PIPE_FREE){
     return SYSERR;
   }
-  pipe_table[devpipe].state = PIPE_CONNECTED;
-  pipe_table[devpipe].reader = reader;
-  pipe_table[devpipe].writer = writer;
+  pipe.state = PIPE_CONNECTED;
+  pipe.reader = reader;
+  pipe.writer = writer;
 
 	enable(mask);
 	return OK;

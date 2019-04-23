@@ -8,12 +8,12 @@ devcall pipputc(struct dentry *devptr, char ch) {
     }
     pipe_t pipe = pipe_table[devpipe];
 
-    wait(full_sem);
+    wait(pipe.to_write);
 
-    head = (head+1)%PIPE_SIZE;
-    data[head] = ch;
+    pipe.head = (pipe.head+1)%PIPE_SIZE;
+    pipe.data[pipe.head] = ch;
 
-    signal(empty_sem);
+    signal(pipe.to_read);
 
     enable(mask);
     return OK;
