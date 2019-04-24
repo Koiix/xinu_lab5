@@ -10,6 +10,9 @@ status pipdelete(did32 devpipe) {
 	if(pipe.state == PIPE_FREE || pipe.owner != currpid){
 		return SYSERR;
 	}
+	if(PIP_DEBUG){
+		kprintf("Deleting pipe: %d with owner: %s\n", devtab[devpipe].dvminor, proctab[currpid].prname);
+	}
 	pipe.pipid = -1;
 	pipe.owner = pipe.reader = pipe.writer= -1;
 	semdelete(pipe.to_read);

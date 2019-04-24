@@ -37,6 +37,7 @@ syscall	kill(
 		if(pipe_table[i].owner == pid){
 			pipdelete(pipe_table[i].pipid);
 		}
+		/* if killing side process, disconnect pipe */
 		if(pipe_table[i].reader == pid || pipe_table[i].writer == pid){
 			pipdisconnect(pipe_table[i].pipid);
 		}

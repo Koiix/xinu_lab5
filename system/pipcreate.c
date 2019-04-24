@@ -5,6 +5,9 @@ did32 pipcreate() {
     /* Traverse the list of pipe devices to find one free for use */
     for(int32 minor = 0; minor < MAXPIPES; minor++){
       if(pipe_table[minor].state == PIPE_FREE){
+        if(PIP_DEBUG){
+          kprintf("Creating pipe: %d with owner: %s\n", minor, proctab[currpid].prname);
+        }
         /* Pipe is free for use, so we take the pipe */
         struct pipe_t * pipeptr = &pipe_table[minor];
         /* find pipe device entry with same dvminor as index in pipe table */

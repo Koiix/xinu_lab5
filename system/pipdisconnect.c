@@ -9,7 +9,7 @@ status pipdisconnect(did32 devpipe) {
   if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || (pipe.reader != currpid && pipe.writer != currpid)){
 		return SYSERR;
 	}
-
+	if(PIP_DEBUG) kprintf("Process: %s is disconnecting from pipe: %d\n", proctab[currpid].prname, devtab[devpipe].dvminor);
 	//This process cleans the pipe
 	if(pipe.state == PIPE_SEMICONNECTED){
 		pipe.state = PIPE_USED;
@@ -31,7 +31,8 @@ status pipdisconnect(did32 devpipe) {
 	// if writer calls disconnect, reader reads until pipe is empty and cleans
 
 	// if reader calls disconnect, writer cleans pipe
-
+	if(PIP_DEBUG)
+		kprintf("Pipe: %d is now in %s state\n", devtab[devpipe].dvminor, pipe.state==PIPE_SEMICONNECTED ? "Semi-Connected" : "Used");
 	restore(mask);
 	return OK;
 }
