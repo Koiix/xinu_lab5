@@ -10,7 +10,7 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	//process must be the reader
 	if(pipe.reader!=currpid)
 		return SYSERR;
-	if((pipe.state != CONNECTED && pipe.state != PIPE_SEMICONNECTED)){
+	if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED)){
 		return SYSERR;
 	}
 

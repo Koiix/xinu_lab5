@@ -12,7 +12,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   if(pipe.writer != currpid)
     return SYSERR;
 
-  if(pipe.state != CONNECTED){
+  if(pipe.state != PIPE_CONNECTED){
     if(pipe.state==PIPE_SEMICONNECTED){
       pipdisconnect(devptr->dvnum);
     }

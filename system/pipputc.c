@@ -9,7 +9,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
     struct pipe_t pipe = pipe_table[devpipe];
     if(pipe.writer!=currpid)
       return SYSERR;
-    if(pipe.state != CONNECTED){
+    if(pipe.state != PIPE_CONNECTED){
       if(pipe.state == PIPE_SEMICONNECTED){
         pipdisconnect(devpipe);
       }
