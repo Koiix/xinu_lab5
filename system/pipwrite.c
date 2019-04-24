@@ -27,6 +27,6 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
     signal(pipe.to_read);
   }
 
-  enable(mask);
+  restore(mask);
   return numwrite;
 }

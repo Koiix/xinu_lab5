@@ -5,7 +5,7 @@
 
 #define no_data(f) ((abs(f.head - f.tail)) == (0))
 
-#define isbadpipe(f)  ( ((f) < PIPELINE0) | ((f) >= PIPELINE0+MAX_PIPES) )
+#define isbadpipe(f)  ( ((f) < PIPELINE0) | ((f) >= PIPELINE0+MAXPIPES) )
 
 enum pipe_state_t {
 	PIPE_FREE,

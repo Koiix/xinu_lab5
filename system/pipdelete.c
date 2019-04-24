@@ -17,6 +17,6 @@ status pipdelete(did32 devpipe) {
 	pipe.head = pipe.tail = -1;
 	pipe.state = PIPE_FREE;
 
-	enable(mask);
+	restore(mask);
 	return OK;
 }

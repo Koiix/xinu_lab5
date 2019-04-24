@@ -15,6 +15,6 @@ status pipconnect(did32 devpipe , pid32 writer, pid32 reader) {
   pipe.to_read = semcreate(0);  /* Consumer semaphore starts at 0 */
   pipe.to_write = semcreate(PIPE_SIZE); /* Producer semaphore starts at buffer size */
 
-	enable(mask);
+	restore(mask);
 	return OK;
 }

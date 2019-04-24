@@ -31,6 +31,6 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 		}
 	}
 
-	enable(mask);
+	restore(mask);
 	return numread;
 }

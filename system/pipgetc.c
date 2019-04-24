@@ -21,6 +21,6 @@ devcall pipgetc(struct dentry *devptr) {
       pipdisconnect(devptr->dvnum);
     }
 
-    enable(mask);
+    restore(mask);
     return OK;
 }

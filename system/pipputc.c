@@ -23,6 +23,6 @@ devcall pipputc(struct dentry *devptr, char ch) {
 
     signal(pipe.to_read);
 
-    enable(mask);
+    restore(mask);
     return OK;
 }

@@ -32,7 +32,7 @@ syscall	kill(
 		close(prptr->prdesc[i]);
 	}
 
-	for(i = 0; i < PIPE_MAX; i++){
+	for(i = 0; i < MAXPIPES; i++){
 		/* if killing pipe owner, delete the pipe */
 		if(pipe_table[i].owner == pid){
 			pipdelete(pipe_table[i].pipid);

@@ -14,6 +14,6 @@ did32 pipcreate() {
         return pipeptr->pipid;
       }
     }
-    enable(mask);
+    restore(mask);
     return SYSERR;
 }

@@ -32,6 +32,6 @@ status pipdisconnect(did32 devpipe) {
 
 	// if reader calls disconnect, writer cleans pipe
 
-	enable(mask);
+	restore(mask);
 	return OK;
 }
