@@ -6,7 +6,7 @@ devcall pipgetc(struct dentry *devptr) {
       return SYSERR;
     }
     struct pipe_t pipe = pipe_table[devptr->dvnum];
-    if((pipe.state != CONNECTED && pipe.state != SEM_CONNECTED) || pipe.reader != currpid){
+    if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || pipe.reader != currpid){
       return SYSERR;
     }
 
@@ -22,5 +22,5 @@ devcall pipgetc(struct dentry *devptr) {
     }
 
     restore(mask);
-    return OK;
+    return ch;
 }
