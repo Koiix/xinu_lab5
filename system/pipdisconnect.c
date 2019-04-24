@@ -6,21 +6,32 @@ status pipdisconnect(did32 devpipe) {
 		return SYSERR;
 	}
 	pipe_t pipe = pipetable[devtab[devpipe].dvminor];
-  if(pipe.state != PIPE_CONNECTED || (pipe.reader != currpid && pipe.writer != currpid)){
+  if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || (pipe.reader != currpid && pipe.writer != currpid)){
 		return SYSERR;
 	}
 
-	// if writer calls disconnect, reader reads until pipe is empty and cleans
-	if(pipe.writer == currpid){
-		for(int32 i = 0; i < abs(pipe.head-pipe.tail); i++)
-			wait(pipe.to_write);
+	//This process cleans the pipe
+	if(pipe.state == PIPE_SEMICONNECTED){
+		pipe.state = PIPE_USED;
+		pipe.reader = -1;
+		pipe.writer = -1;
+		pipe.head = pipe.tail = -1;
+		semdelete(pipe.to_write);
+		semdelete(pipe.to_read);
 	}
+	if(pipe.state == PIPE_CONNECTED){
+		if(pipe.writer == currpid){
+			pipe.writer = -1;
+		}
+		if(pipe.reader == currpid){
+			pipe.reader = -1;
+		}
+		pipe.state = PIPE_SEMICONNECTED;
+	}
+	// if writer calls disconnect, reader reads until pipe is empty and cleans
 
 	// if reader calls disconnect, writer cleans pipe
 
-	pipe.state = PIPE_USED;
-	pipe.reader = -1;
-	pipe.writer = -1;
 	enable(mask);
 	return OK;
 }

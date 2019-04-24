@@ -12,10 +12,8 @@ status pipdelete(did32 devpipe) {
 	}
 	pipe.pipid = -1;
 	pipe.owner = pipe.reader = pipe.writer= -1;
-	semdelete(pipe.empty_sem);
-	semdelete(pipe.full_sem);
-	semdelete(pipe.r_lock);
-	semdelete(pipe.w_lock);
+	semdelete(pipe.to_read);
+	semdelete(pipe.to_write);
 	pipe.head = pipe.tail = -1;
 	pipe.state = PIPE_FREE;
 

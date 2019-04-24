@@ -9,8 +9,6 @@ did32 pipcreate() {
         pipeptr->pipid = PIPELINE0 + minor;
         /* Pipe is free for use, so we take the pipe */
         struct pipe_t * pipeptr = &pipe_tables[minor];
-        pipeptr->to_read = semcreate(0);  /* Consumer semaphore starts at 0 */
-        pipeptr->to_write = semcreate(PIPE_SIZE); /* Producer semaphore starts at buffer size */
         pipeptr->pipe_state_t = PIPE_USED;
         pipeptr->owner = currpid;
         return pipeptr->pipid;

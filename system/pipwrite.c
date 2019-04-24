@@ -7,7 +7,15 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
     return SYSERR;
   }
   pipe_t pipe = pipe_table[devpip];
-  if(pipe.state != CONNECTED || pipe.writer != currpid){
+  
+  //process must be the writer
+  if(pipe.writer != currpid)
+    return SYSERR;
+
+  if(pipe.state != CONNECTED){
+    if(pipe.state==PIPE_SEMICONNECTED){
+      pipdisconnect(devptr->dvnum);
+    }
     return SYSERR;
   }
 

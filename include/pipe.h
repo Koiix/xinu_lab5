@@ -3,6 +3,7 @@
 #define MAXPIPES 10
 #define PIPE_SIZE 1024
 
+#define no_data(f) ((abs(f.head - f.tail)) == (0))
 
 #define isbadpipe(f)  ( ((f) < PIPELINE0) | ((f) >= PIPELINE0+MAX_PIPES) )
 
@@ -10,8 +11,7 @@ enum pipe_state_t {
 	PIPE_FREE,
 	PIPE_USED,
 	PIPE_CONNECTED,
-	PIPE_READ,
-	PIPE_WRITE
+	PIPE_SEMICONNECTED
 };
 
 struct pipe_t {

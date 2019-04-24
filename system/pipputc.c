@@ -7,6 +7,14 @@ devcall pipputc(struct dentry *devptr, char ch) {
       return SYSERR;
     }
     pipe_t pipe = pipe_table[devpipe];
+    if(pipe.writer!=currpid)
+      return SYSERR;
+    if(pipe.state != CONNECTED){
+      if(pipe.state == PIPE_SEMICONNECTED){
+        pipdisconnect(devpipe);
+      }
+      return SYSERR;
+    }
 
     wait(pipe.to_write);
 
