@@ -16,7 +16,7 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 
 	int32 numread;
 
-	for(numread = 0; numread < len; i++){
+	for(numread = 0; numread < len; numread++){
 
 		wait(pipe.to_read);
 		pipe.tail = (pipe.tail+1)%PIPE_SIZE;
