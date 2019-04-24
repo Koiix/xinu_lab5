@@ -22,7 +22,7 @@ struct pipe_t {
 	pid32 writer;	//Process ID of writing processs
 	sid32 to_read;	//semaphore that tells when buffer is empty
 	sid32 to_write;	//semaphore that tells when buffer is full
-	char[PIPE_SIZE] data;	//Data stored in pipe
+	char data[PIPE_SIZE];	//Data stored in pipe
 	int32 head;	//Head for circular buffer
 	int32 tail;	//Tail for circular buffer
 };

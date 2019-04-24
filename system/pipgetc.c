@@ -5,7 +5,7 @@ devcall pipgetc(struct dentry *devptr) {
     if(isbadpipe(devptr->dvnum)){
       return SYSERR;
     }
-    pipe_t pipe = pipe_table[devptr->dvnum];
+    struct pipe_t pipe = pipe_table[devptr->dvnum];
     if((pipe.state != CONNECTED && pipe.state != SEM_CONNECTED) || pipe.reader != currpid){
       return SYSERR;
     }

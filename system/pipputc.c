@@ -6,7 +6,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
     if(isbadpipe(devpipe)){
       return SYSERR;
     }
-    pipe_t pipe = pipe_table[devpipe];
+    struct pipe_t pipe = pipe_table[devpipe];
     if(pipe.writer!=currpid)
       return SYSERR;
     if(pipe.state != CONNECTED){

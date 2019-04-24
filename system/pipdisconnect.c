@@ -5,7 +5,7 @@ status pipdisconnect(did32 devpipe) {
 	if(isbadpipe(devpipe)){
 		return SYSERR;
 	}
-	pipe_t pipe = pipetable[devtab[devpipe].dvminor];
+	struct pipe_t pipe = pipetable[devtab[devpipe].dvminor];
   if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || (pipe.reader != currpid && pipe.writer != currpid)){
 		return SYSERR;
 	}

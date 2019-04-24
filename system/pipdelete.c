@@ -6,7 +6,7 @@ status pipdelete(did32 devpipe) {
   if(isbadpipe(devpipe)){
 		return SYSERR;
 	}
-	pipe_t pipe = pipe_table[devtab[devpipe].dvminor]; //extracts pipe_t
+	struct pipe_t pipe = pipe_table[devtab[devpipe].dvminor]; //extracts pipe_t
 	if(pipe.state == PIPE_FREE || pipe.owner != currpid){
 		return SYSERR;
 	}

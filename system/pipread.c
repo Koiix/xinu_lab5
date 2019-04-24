@@ -5,7 +5,7 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	if(isbadpipe(devptr->dvnum) || strlen(buf) < len){
 		return SYSERR;
 	}
-	pipe_t pipe = pipe_table[devptr->dvminor];
+	struct pipe_t pipe = pipe_table[devptr->dvminor];
 
 	//process must be the reader
 	if(pipe.reader!=currpid)

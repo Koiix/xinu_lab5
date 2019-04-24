@@ -5,7 +5,7 @@ status pipconnect(did32 devpipe , pid32 writer, pid32 reader) {
 	if(isbadpipe(devpipe) || reader == writer){
 		return SYSERR;
 	}
-  pipe_t pipe = pipe_table[devtab[devpipe].dvminor];
+  struct pipe_t pipe = pipe_table[devtab[devpipe].dvminor];
   if(pipe.state == PIPE_CONNECTED || pipe.state == PIPE_FREE || pipe.state == PIPE_SEMICONNECTED){
     return SYSERR;
   }

@@ -201,8 +201,9 @@ static	void	sysinit()
 
 	/* Initialize pipes */
 
-	for(i = 0; i < PIPE_MAX; i++){
-		pipeptr = &pipe_table[i];
+	for(i = 0; i < MAXPIPES; i++){
+		struct pipe_t * pipeptr = &pipe_table[i];
+		pipeptr->pipid = PIPELINE0+i;
 		pipeptr->state = PIPE_FREE;
 		pipeptr->owner = -1;
 		pipeptr->reader = pipeptr->writer = -1;

@@ -6,8 +6,8 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   if(isbadpipe(devpip) || strlen(buf) < len){
     return SYSERR;
   }
-  pipe_t pipe = pipe_table[devpip];
-  
+  struct pipe_t pipe = pipe_table[devpip];
+
   //process must be the writer
   if(pipe.writer != currpid)
     return SYSERR;
