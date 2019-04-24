@@ -23,7 +23,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   for(numwrite = 0; numwrite < len; numwrite++){
     wait(pipe.to_write);
     pipe.head = (pipe.head+1)%PIPE_SIZE;
-    pipe.data[pipe.head] = ch;
+    pipe.data[pipe.head] = *(buf+numwrite);
     signal(pipe.to_read);
   }
 
