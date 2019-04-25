@@ -14,7 +14,7 @@ status pipconnect(did32 devpipe , pid32 writer, pid32 reader) {
     return SYSERR;
   }
   if(PIP_DEBUG){
-    kprintf("connecting writer: %s to reader: %s using pipe: %d\n", proctab[writer].prname, proctab[reader].prname,devtab[devpipe].dvminor);
+    kprintf("connecting writer: %s to reader: %s using pipe: %d (Device %d)\n", proctab[writer].prname, proctab[reader].prname,devtab[devpipe].dvminor, devpipe);
   }
   pipe.state = PIPE_CONNECTED;
   pipe.reader = reader;
