@@ -2,7 +2,7 @@
 
 uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   int32 mask = disable();
-  if(isbadpipe(devptr->dvnum) || strlen(buf) < len){
+  if(isbadpipe(devptr->dvnum)){
     if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
