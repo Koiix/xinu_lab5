@@ -6,7 +6,7 @@ did32 pipcreate() {
     for(int32 minor = 0; minor < MAXPIPES; minor++){
       if(pipe_table[minor].state == PIPE_FREE){
         if(PIP_DEBUG){
-          kprintf("Creating pipe: %d with owner: %s\n", minor, proctab[currpid].prname);
+          kprintf("\nCreating pipe: %d with owner: %s\n", minor, proctab[currpid].prname);
         }
         /* Pipe is free for use, so we take the pipe */
         struct pipe_t * pipeptr = &pipe_table[minor];
