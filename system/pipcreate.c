@@ -14,6 +14,7 @@ did32 pipcreate() {
         pipeptr->pipid = PIPELINE0 + minor;
         pipeptr->state = PIPE_USED;
         pipeptr->owner = currpid;
+        kprintf("RETURNING PIPID: %d\n", pipeptr->pipid);
         restore(mask);
         return pipeptr->pipid;
       }
