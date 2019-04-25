@@ -12,7 +12,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
     //caller must be the writer!!
     if(pipe.writer != currpid){
       if(PIP_DEBUG) {PIP_ERR("putc bad writer");
-        kprintf("Writer: %d trying to write to pipe with writer %d\n", currpid, pipe.writer);
+        kprintf("Writer: %d trying to write to pipe: %d with writer %d\n", currpid, devptr->dvminor, pipe.writer);
       }
       restore(mask);
       return SYSERR;
