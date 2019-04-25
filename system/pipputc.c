@@ -2,13 +2,12 @@
 
 devcall pipputc(struct dentry *devptr, char ch) {
     int32 mask = disable();
-    pipid32 devpipe = devptr->dvnum;
-    if(isbadpipe(devpipe)){
+    if(isbadpipe(devptr->dvnum)){
       if(PIP_DEBUG) PIP_ERR("putc bad pipe");
       restore(mask);
       return SYSERR;
     }
-    struct pipe_t pipe = pipe_table[devpipe];
+    struct pipe_t pipe = pipe_table[devptr->dvnum];
 
     //caller must be the writer!!
     if(pipe.writer!=currpid){

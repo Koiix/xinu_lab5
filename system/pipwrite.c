@@ -2,13 +2,12 @@
 
 uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   int32 mask = disable();
-  pipid32 devpip = devptr->dvnum;
-  if(isbadpipe(devpip) || strlen(buf) < len){
+  if(isbadpipe(devptr->dvnum) || strlen(buf) < len){
     if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
   }
-  struct pipe_t pipe = pipe_table[devpip];
+  struct pipe_t pipe = pipe_table[devptr->dvminor];
 
   //caller must be the writer
   if(pipe.writer != currpid){
