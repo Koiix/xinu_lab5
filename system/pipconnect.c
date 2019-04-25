@@ -3,10 +3,14 @@
 status pipconnect(did32 devpipe , pid32 writer, pid32 reader) {
   int32 mask = disable();
 	if(isbadpipe(devpipe) || isbadpid(reader) || isbadpid(writer) || reader == writer){
-		return SYSERR;
+    if(PIP_DEBUG) PIP_ERR("connect");
+    restore(mask);
+    return SYSERR;
 	}
   struct pipe_t pipe = pipe_table[devtab[devpipe].dvminor];
   if(pipe.state == PIPE_CONNECTED || pipe.state == PIPE_FREE || pipe.state == PIPE_SEMICONNECTED){
+    if(PIP_DEBUG) PIP_ERR("connect");
+    restore(mask);
     return SYSERR;
   }
   if(PIP_DEBUG){

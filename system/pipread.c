@@ -3,14 +3,21 @@
 uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	int32 mask = disable();
 	if(isbadpipe(devptr->dvnum) || strlen(buf) < len){
+		if(PIP_DEBUG) PIPE_ERR("read");
+		restore(mask);
 		return SYSERR;
 	}
 	struct pipe_t pipe = pipe_table[devptr->dvminor];
 
 	//process must be the reader
-	if(pipe.reader!=currpid)
-		return SYSERR;
+	if(pipe.reader!=currpid){
+		if(PIP_DEBUG) PIPE_ERR("read");
+			restore(mask);
+			return SYSERR;
+	}
 	if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED)){
+		if(PIP_DEBUG) PIPE_ERR("read");
+		restore(mask);
 		return SYSERR;
 	}
 

@@ -14,9 +14,11 @@ did32 pipcreate() {
         pipeptr->pipid = PIPELINE0 + minor;
         pipeptr->state = PIPE_USED;
         pipeptr->owner = currpid;
+        restore(mask);
         return pipeptr->pipid;
       }
     }
+    if(PIP_DEBUG) PIP_ERR("create");
     restore(mask);
     return SYSERR;
 }

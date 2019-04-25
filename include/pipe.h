@@ -8,6 +8,8 @@
 
 #define isbadpipe(f)  ( ((f) < PIPELINE0) | ((f) >= PIPELINE0+MAXPIPES) )
 
+#define PIP_ERR(err) kprintf("ERROR: %s\n", err)
+
 enum pipe_state_t {
 	PIPE_FREE,
 	PIPE_USED,
