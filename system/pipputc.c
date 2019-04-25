@@ -17,7 +17,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
     }
     if(pipe.state != PIPE_CONNECTED){
       if(pipe.state == PIPE_SEMICONNECTED){
-        pipdisconnect(devpipe);
+        pipdisconnect(devptr->dvnum);
       }
       if(PIP_DEBUG) PIP_ERR("putc disconnected");
       restore(mask);
