@@ -4,7 +4,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
     int32 mask = disable();
     pipid32 devpipe = devptr->dvnum;
     if(isbadpipe(devpipe)){
-      if(PIP_DEBUG) PIPE_ERR("putc");
+      if(PIP_DEBUG) PIP_ERR("putc");
       restore(mask);
       return SYSERR;
     }
@@ -12,7 +12,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
 
     //caller must be the writer!!
     if(pipe.writer!=currpid){
-      if(PIP_DEBUG) PIPE_ERR("putc");
+      if(PIP_DEBUG) PIP_ERR("putc");
       restore(mask);
       return SYSERR;
     }
@@ -20,7 +20,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
       if(pipe.state == PIPE_SEMICONNECTED){
         pipdisconnect(devpipe);
       }
-      if(PIP_DEBUG) PIPE_ERR("putc");
+      if(PIP_DEBUG) PIP_ERR("putc");
       restore(mask);
       return SYSERR;
     }

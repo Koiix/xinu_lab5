@@ -3,13 +3,13 @@
 status pipdisconnect(did32 devpipe) {
 	int32 mask = disable();
 	if(isbadpipe(devpipe)){
-		if(PIP_DEBUG) PIPE_ERR("disconnect");
+		if(PIP_DEBUG) PIP_ERR("disconnect");
 		restore(mask);
 		return SYSERR;
 	}
 	struct pipe_t pipe = pipe_table[devtab[devpipe].dvminor];
   if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || (pipe.reader != currpid && pipe.writer != currpid)){
-		if(PIP_DEBUG) PIPE_ERR("disconnect");
+		if(PIP_DEBUG) PIP_ERR("disconnect");
 		restore(mask);
 		return SYSERR;
 	}

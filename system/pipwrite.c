@@ -4,7 +4,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   int32 mask = disable();
   pipid32 devpip = devptr->dvnum;
   if(isbadpipe(devpip) || strlen(buf) < len){
-    if(PIP_DEBUG) PIPE_ERR("write");
+    if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
   }
@@ -12,7 +12,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
 
   //caller must be the writer
   if(pipe.writer != currpid){
-    if(PIP_DEBUG) PIPE_ERR("write");
+    if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
   }
@@ -21,7 +21,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
     if(pipe.state==PIPE_SEMICONNECTED){
       pipdisconnect(devptr->dvnum);
     }
-    if(PIP_DEBUG) PIPE_ERR("write");
+    if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
   }

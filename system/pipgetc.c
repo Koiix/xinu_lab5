@@ -3,13 +3,13 @@
 devcall pipgetc(struct dentry *devptr) {
     int32 mask = disable();
     if(isbadpipe(devptr->dvnum)){
-      if(PIP_DEBUG) PIPE_ERR("getc");
+      if(PIP_DEBUG) PIP_ERR("getc");
       restore(mask);
       return SYSERR;
     }
     struct pipe_t pipe = pipe_table[devptr->dvminor];
     if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || pipe.reader != currpid){
-      if(PIP_DEBUG) PIPE_ERR("getc");
+      if(PIP_DEBUG) PIP_ERR("getc");
       restore(mask);
       return SYSERR;
     }
