@@ -17,20 +17,19 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	int32 numread;
 
 	for(numread = 0; numread < len; numread++){
-
-		wait(pipe.to_read);
-		pipe.tail = (pipe.tail+1)%PIPE_SIZE;
-    *(buf+numread) = pipe.data[pipe.tail];
-		signal(pipe.to_write);
-
-		if(no_data(pipe)){
-			if(pipe.state == PIPE_SEMICONNECTED){
-				pipdisconnect(devptr->dvnum);
-			}
+    *(buf+numread) = pipgetc(devptr);
+		// if pipe disconnected after pipgetc, break out of reading
+		if(pipe.state != PIPE_SEMICONNECTED && pipe.state != PIPE_CONNECTED)
 			break;
-		}
 	}
 
+	if(PIP_DEBUG){
+		char read_str[numread];
+		for(int i = 0; i < numread; i++){
+			read_str[i] = *(buf+numread);
+		}
+		kprintf("Process: %s finished reading: %s from pipe %d\n", proctab[currpid].prname, read_str, devptr->dvminor);
+	}
 	restore(mask);
 	return numread;
 }

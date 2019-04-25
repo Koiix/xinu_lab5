@@ -23,6 +23,10 @@ devcall pipputc(struct dentry *devptr, char ch) {
 
     signal(pipe.to_read);
 
+    if(PIP_DEBUG){
+      kprintf("Process: %s put character: %c to pipe %d\n", proctab[currpid].prname, ch, devptr->dvminor);
+    }
+
     restore(mask);
     return OK;
 }

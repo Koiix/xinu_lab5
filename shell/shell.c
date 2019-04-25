@@ -178,10 +178,10 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 						 /* if previous token was pipe, redirect input to already created pipe */
 						 if(!(cur <= 0) && toktyp[cur-1] == SH_TOK_STICK){
 						 	reader = childs[cur];
-							proctab[childs[cur]].prdesc[0] = pipe;
 							/* Connect pipe after writer, previous simple command proc, and reader, current simple command proc,
 							have been saved and our known. The reader always comes last, so this block will do connecting. */
 						 	pipconnect(pipe, writer, reader);
+							proctab[childs[cur]].prdesc[0] = pipe;
 						 }else{
 						 		proctab[childs[cur]].prdesc[0] = stdinput;
 						 }

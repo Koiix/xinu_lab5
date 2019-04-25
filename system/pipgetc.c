@@ -5,7 +5,7 @@ devcall pipgetc(struct dentry *devptr) {
     if(isbadpipe(devptr->dvnum)){
       return SYSERR;
     }
-    struct pipe_t pipe = pipe_table[devptr->dvnum];
+    struct pipe_t pipe = pipe_table[devptr->dvminor];
     if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED) || pipe.reader != currpid){
       return SYSERR;
     }
@@ -21,6 +21,10 @@ devcall pipgetc(struct dentry *devptr) {
       pipdisconnect(devptr->dvnum);
     }
 
+    if(PIP_DEBUG){
+      kprintf("Process: %s got character: %c from pipe %d\n", proctab[currpid].prname, ch, devptr->dvminor);
+    }
+    
     restore(mask);
     return ch;
 }

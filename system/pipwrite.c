@@ -20,12 +20,21 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   }
 
   int32 numwrite;
+
   for(numwrite = 0; numwrite < len; numwrite++){
-    wait(pipe.to_write);
-    pipe.head = (pipe.head+1)%PIPE_SIZE;
-    pipe.data[pipe.head] = *(buf+numwrite);
-    signal(pipe.to_read);
+    pipputc(devptr, *(buf+numwrite));
+    //if pipe disconnected after pipputc, then break
+    if(pipe.state != PIPE_SEMICONNECTED && pipe.state != PIPE_CONNECTED)
+			break;
   }
+
+  if(PIP_DEBUG){
+		char write_str[numwrite];
+		for(int i = 0; i < numread; i++){
+			read_str[i] = *(buf+numwrite);
+		}
+		kprintf("Process: %s finished writing: %s to pipe %d\n", proctab[currpid].prname, write_str, devptr->dvminor);
+	}
 
   restore(mask);
   return numwrite;
