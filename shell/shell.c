@@ -178,6 +178,7 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 						 /* if previous token was pipe, redirect input to already created pipe */
 						 if(!(cur <= 0) && toktyp[cur-1] == SH_TOK_STICK){
 						 	reader = childs[cur];
+							kprintf("READER: %d", reader);
 							/* Connect pipe after writer, previous simple command proc, and reader, current simple command proc,
 							have been saved and our known. The reader always comes last, so this block will do connecting. */
 						 	pipconnect(pipe, writer, reader);
@@ -191,6 +192,7 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 							/* The writer always comes first, so this block will do the creating */
 							pipe = pipcreate();	/* Create new pipe */
 							writer = childs[cur];
+							kprintf("WRITER: %d", writer);
 							proctab[childs[cur]].prdesc[1] = pipe;
 							next_cur++;
 						/* if no pipe in lookahead, write to stdoutput */
