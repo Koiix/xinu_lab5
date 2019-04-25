@@ -7,7 +7,7 @@ devcall pipputc(struct dentry *devptr, char ch) {
       restore(mask);
       return SYSERR;
     }
-    struct pipe_t pipe = pipe_table[devptr->dvnum];
+    struct pipe_t pipe = pipe_table[devptr->dvminor];
 
     //caller must be the writer!!
     if(pipe.writer!=currpid){
