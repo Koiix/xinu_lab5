@@ -30,8 +30,8 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
 
   if(PIP_DEBUG){
 		char write_str[numwrite];
-		for(int i = 0; i < numread; i++){
-			read_str[i] = *(buf+numwrite);
+		for(int i = 0; i < numwrite; i++){
+			write_str[i] = *(buf+numwrite);
 		}
 		kprintf("Process: %s finished writing: %s to pipe %d\n", proctab[currpid].prname, write_str, devptr->dvminor);
 	}
