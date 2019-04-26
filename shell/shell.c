@@ -229,9 +229,9 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 
         }
     }
-		
-		for(int i = 0; i < pipindex; pipindex++){
-			pipdelete(pipes[pipindex]);
+
+		for(int i = 0; i < pipindex; i++){
+			pipdelete(pipes[i]);
 		}
 
     return true;
