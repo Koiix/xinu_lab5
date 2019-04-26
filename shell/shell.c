@@ -141,9 +141,6 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
         }
     }
 
-		did32 pipes[MAXPIPES];	/* where to read/write standard input for current simple commands with pipe */
-		int32 pipindex;
-		pid32 reader, writer; /* Used to store reader/writer for pipes */
     int cur = 0;	/* current token index */
     int next_cur = 0;	/* next token index (lookahead)*/
 
@@ -176,28 +173,9 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
                                SHELL_CMDSTK, SHELL_CMDPRIO,
                                cmdtab[cmdtab_index].cname, 2, num_args, &tmparg);
 
-						 /* if previous token was pipe, redirect input to already created pipe */
-						 if(!(cur <= 0) && toktyp[cur-1] == SH_TOK_STICK){
-						 	reader = childs[cur];
-							/* Connect pipe after writer, previous simple command proc, and reader, current simple command proc,
-							have been saved and our known. The reader always comes last, so this block will do connecting. */
-						 	pipconnect(pipes[pipindex], writer, reader);
-							proctab[childs[cur]].prdesc[0] = pipes[pipindex];
-						 }else{
-						 		proctab[childs[cur]].prdesc[0] = stdinput;
-						 }
 
-						/* Check if next token if pipe, if so, advance next token and redirect output */
-						if(!(next_cur >= ntok) && toktyp[next_cur] == SH_TOK_STICK){
-							/* The writer always comes first, so this block will do the creating */
-							pipes[pipindex++] = pipcreate();	/* Create new pipe */
-							writer = childs[cur];
-							proctab[childs[cur]].prdesc[1] = pipes[pipindex];
-							next_cur++;
-						/* if no pipe in lookahead, write to stdoutput */
-						}else{
-							proctab[childs[cur]].prdesc[1] = stdoutput;
-						}
+						proctab[childs[cur]].prdesc[0] = stdinput;
+						proctab[childs[cur]].prdesc[1] = stdoutput;
 
 
             /* If creation or argument copy fails, report error */
@@ -216,9 +194,24 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 
     }
 
+		did32 pipe, pipe_save;	/* where to read/write standard input for current simple commands with pipe */
+		pid32 reader, writer; /* Used to store reader/writer for pipes */
+
+
     for (int i=0; i<SHELL_MAXTOK; i++) {
         if (childs[i] == -1)
             continue;
+				/* process is a reader */
+				if(i < SHELL_MAXTOK-2 && toktyp[i+1] == SH_TOK_STICK){
+					pipe = pipcreate();
+					writer = childs[i];
+					reader = childs[i+2];
+					pipconnect(pipe, writer, reader);
+					&proctab[writer]->prdesc[1] = pipe;
+					&proctab[reader]->prdesc[0] = pipe;
+					isreader = true;
+				}
+				pipe_reader = pipe_writer;
         msg = recvclr();
         resume(childs[i]);
         if (!backgnd) {
@@ -226,11 +219,14 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
             while (msg != childs[i]) {
                 msg = receive();
             }
-
+						if(proctab[childs[i]].prdesc[0] == pipe_save){
+							pipdelete(pipe_save);
+						}
         }
+				pipe_save = pipe;
     }
 
-		for(int i = 0; i < pipindex; i++){
+		for(int32 i = 0; i < pipindex; i++){
 			pipdelete(pipes[i]);
 		}
 
