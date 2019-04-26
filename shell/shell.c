@@ -173,6 +173,9 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
                                SHELL_CMDSTK, SHELL_CMDPRIO,
                                cmdtab[cmdtab_index].cname, 2, num_args, &tmparg);
 
+						//skip the pipe token
+						if(toktyp[next_cur] == SH_TOK_STICK)
+								next_cur++;
 
 						proctab[childs[cur]].prdesc[0] = stdinput;
 						proctab[childs[cur]].prdesc[1] = stdoutput;
