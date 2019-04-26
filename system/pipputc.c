@@ -7,18 +7,16 @@ devcall pipputc(struct dentry *devptr, char ch) {
       restore(mask);
       return SYSERR;
     }
-    struct pipe_t pipe = pipe_table[devptr->dvminor];
+    struct pipe_t * pipe = &pipe_table[devptr->dvminor];
 
     //caller must be the writer!!
-    if(pipe.writer != currpid){
-      if(PIP_DEBUG) {PIP_ERR("putc bad writer");
-        kprintf("Writer: %d trying to write to pipe: %d with writer %d\n", currpid, devptr->dvminor, pipe.writer);
-      }
+    if(pipe->writer != currpid){
+      if(PIP_DEBUG) PIP_ERR("putc bad writer");
       restore(mask);
       return SYSERR;
     }
-    if(pipe.state != PIPE_CONNECTED){
-      if(pipe.state == PIPE_SEMICONNECTED){
+    if(pipe->state != PIPE_CONNECTED){
+      if(pipe->state == PIPE_SEMICONNECTED){
         pipdisconnect(devptr->dvnum);
       }
       if(PIP_DEBUG) PIP_ERR("putc disconnected");
@@ -26,12 +24,12 @@ devcall pipputc(struct dentry *devptr, char ch) {
       return SYSERR;
     }
 
-    wait(pipe.to_write);
+    wait(pipe->to_write);
 
-    pipe.head = (pipe.head+1)%PIPE_SIZE;
-    pipe.data[pipe.head] = ch;
+    pipe->head = (pipe->head+1)%PIPE_SIZE;
+    pipe->data[pipe->head] = ch;
 
-    signal(pipe.to_read);
+    signal(pipe->to_read);
 
     if(PIP_DEBUG){
       kprintf("Process: %s put character: %c to pipe %d\n", proctab[currpid].prname, ch, devptr->dvminor);

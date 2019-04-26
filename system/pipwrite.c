@@ -7,17 +7,17 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
     restore(mask);
     return SYSERR;
   }
-  struct pipe_t pipe = pipe_table[devptr->dvminor];
+  struct pipe_t * pipe = &pipe_table[devptr->dvminor];
 
   //caller must be the writer
-  if(pipe.writer != currpid){
+  if(pipe->writer != currpid){
     if(PIP_DEBUG) PIP_ERR("write");
     restore(mask);
     return SYSERR;
   }
 
-  if(pipe.state != PIPE_CONNECTED){
-    if(pipe.state==PIPE_SEMICONNECTED){
+  if(pipe->state != PIPE_CONNECTED){
+    if(pipe->state==PIPE_SEMICONNECTED){
       pipdisconnect(devptr->dvnum);
     }
     if(PIP_DEBUG) PIP_ERR("write");
@@ -30,7 +30,7 @@ uint32 pipwrite(struct dentry *devptr, char* buf, uint32 len) {
   for(numwrite = 0; numwrite < len; numwrite++){
     pipputc(devptr, *(buf+numwrite));
     //if pipe disconnected after pipputc, then break
-    if(pipe.state != PIPE_SEMICONNECTED && pipe.state != PIPE_CONNECTED)
+    if(pipe->state != PIPE_SEMICONNECTED && pipe->state != PIPE_CONNECTED)
 			break;
   }
 

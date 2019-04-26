@@ -7,15 +7,15 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 		restore(mask);
 		return SYSERR;
 	}
-	struct pipe_t pipe = pipe_table[devptr->dvminor];
+	struct pipe_t * pipe = pipe_table[devptr->dvminor];
 
 	//process must be the reader
-	if(pipe.reader!=currpid){
+	if(pipe->reader!=currpid){
 		if(PIP_DEBUG) PIP_ERR("read");
 			restore(mask);
 			return SYSERR;
 	}
-	if((pipe.state != PIPE_CONNECTED && pipe.state != PIPE_SEMICONNECTED)){
+	if((pipe->state != PIPE_CONNECTED && pipe->state != PIPE_SEMICONNECTED)){
 		if(PIP_DEBUG) PIP_ERR("read");
 		restore(mask);
 		return SYSERR;
@@ -26,7 +26,7 @@ uint32 pipread(struct dentry *devptr, char* buf, uint32 len) {
 	for(numread = 0; numread < len; numread++){
     *(buf+numread) = pipgetc(devptr);
 		// if pipe disconnected after pipgetc, break out of reading
-		if(pipe.state != PIPE_SEMICONNECTED && pipe.state != PIPE_CONNECTED)
+		if(pipe->state != PIPE_SEMICONNECTED && pipe->state != PIPE_CONNECTED)
 			break;
 	}
 
