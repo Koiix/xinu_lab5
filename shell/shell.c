@@ -207,11 +207,9 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 					writer = childs[i];
 					reader = childs[i+2];
 					pipconnect(pipe, writer, reader);
-					&proctab[writer]->prdesc[1] = pipe;
-					&proctab[reader]->prdesc[0] = pipe;
-					isreader = true;
+					proctab[writer].prdesc[1] = pipe;
+					proctab[reader].prdesc[0] = pipe;
 				}
-				pipe_reader = pipe_writer;
         msg = recvclr();
         resume(childs[i]);
         if (!backgnd) {
@@ -225,10 +223,6 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
         }
 				pipe_save = pipe;
     }
-
-		for(int32 i = 0; i < pipindex; i++){
-			pipdelete(pipes[i]);
-		}
 
     return true;
 }
