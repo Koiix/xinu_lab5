@@ -141,7 +141,8 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
         }
     }
 
-		did32 pipe;	/* where to read/write standard input for current simple commands with pipe */
+		did32 pipes[MAXPIPES];	/* where to read/write standard input for current simple commands with pipe */
+		int32 pipindex;
 		pid32 reader, writer; /* Used to store reader/writer for pipes */
     int cur = 0;	/* current token index */
     int next_cur = 0;	/* next token index (lookahead)*/
@@ -180,8 +181,8 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 						 	reader = childs[cur];
 							/* Connect pipe after writer, previous simple command proc, and reader, current simple command proc,
 							have been saved and our known. The reader always comes last, so this block will do connecting. */
-						 	pipconnect(pipe, writer, reader);
-							proctab[childs[cur]].prdesc[0] = pipe;
+						 	pipconnect(pipes[pipindex], writer, reader);
+							proctab[childs[cur]].prdesc[0] = pipes[pipindex];
 						 }else{
 						 		proctab[childs[cur]].prdesc[0] = stdinput;
 						 }
@@ -189,9 +190,9 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
 						/* Check if next token if pipe, if so, advance next token and redirect output */
 						if(!(next_cur >= ntok) && toktyp[next_cur] == SH_TOK_STICK){
 							/* The writer always comes first, so this block will do the creating */
-							pipe = pipcreate();	/* Create new pipe */
+							pipes[pipindex++] = pipcreate();	/* Create new pipe */
 							writer = childs[cur];
-							proctab[childs[cur]].prdesc[1] = pipe;
+							proctab[childs[cur]].prdesc[1] = pipes[pipindex];
 							next_cur++;
 						/* if no pipe in lookahead, write to stdoutput */
 						}else{
@@ -225,8 +226,13 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
             while (msg != childs[i]) {
                 msg = receive();
             }
+
         }
     }
+		
+		for(int i = 0; i < pipindex; pipindex++){
+			pipdelete(pipes[pipindex]);
+		}
 
     return true;
 }
