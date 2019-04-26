@@ -1,4 +1,4 @@
-#include <xinu->h>
+#include <xinu.h>
 
 status pipdisconnect(did32 devpipe) {
 	int32 mask = disable();
