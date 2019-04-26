@@ -13,7 +13,7 @@ status pipdisconnect(did32 devpipe) {
 		restore(mask);
 		return SYSERR;
 	}
-	if(PIP_DEBUG) kprintf("Process: %s is disconnecting from pipe: %d\n", proctab[currpid]->prname, devtab[devpipe]->dvminor);
+	if(PIP_DEBUG) kprintf("Process: %s is disconnecting from pipe: %d\n", proctab[currpid].prname, devtab[devpipe].dvminor);
 	//This process cleans the pipe
 	if(pipe->state == PIPE_SEMICONNECTED){
 		pipe->state = PIPE_USED;
