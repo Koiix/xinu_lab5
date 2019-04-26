@@ -7,7 +7,7 @@ devcall pipgetc(struct dentry *devptr) {
       restore(mask);
       return SYSERR;
     }
-    struct pipe_t * pipe = pipe_table[devptr->dvminor];
+    struct pipe_t * pipe = &pipe_table[devptr->dvminor];
     if((pipe->state != PIPE_CONNECTED && pipe->state != PIPE_SEMICONNECTED) || pipe->reader != currpid){
       if(PIP_DEBUG) PIP_ERR("getc bad connection or bad reader");
       restore(mask);
