@@ -2,7 +2,7 @@
 
 #define MAXPIPES 10
 #define PIPE_SIZE 1024
-#define PIP_DEBUG 1
+#define PIP_DEBUG 0
 
 #define no_data(f) ((abs(f->head - f->tail)) == (0))
 
