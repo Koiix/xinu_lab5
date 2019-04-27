@@ -204,11 +204,15 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
     for (int i=0; i<SHELL_MAXTOK; i++) {
         if (childs[i] == -1)
             continue;
+				for (j=i+1; j<ntok; j++) {
+					if (toktyp[j] != SH_TOK_OTHER)
+							break;
+				}
 				/* process is a reader */
-				if(i < (SHELL_MAXTOK-2) && toktyp[i+1] == SH_TOK_STICK){
+				if(j+1 < SHELL_MAXTOK && toktyp[j] == SH_TOK_STICK){
 					pipe = pipcreate();
 					writer = childs[i];
-					reader = childs[i+2];
+					reader = childs[j+1];
 					pipconnect(pipe, writer, reader);
 					proctab[writer].prdesc[1] = pipe;
 					proctab[reader].prdesc[0] = pipe;
