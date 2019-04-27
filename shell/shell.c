@@ -205,7 +205,7 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
         if (childs[i] == -1)
             continue;
 				/* process is a reader */
-				if(i < SHELL_MAXTOK-2 && toktyp[i+1] == SH_TOK_STICK){
+				if(i < (SHELL_MAXTOK-2) && toktyp[i+1] == SH_TOK_STICK){
 					pipe = pipcreate();
 					writer = childs[i];
 					reader = childs[i+2];
