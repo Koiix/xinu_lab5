@@ -204,6 +204,7 @@ static bool8 handle_non_builtin(did32 dev, bool8 backgnd,
     for (int i=0; i<SHELL_MAXTOK; i++) {
         if (childs[i] == -1)
             continue;
+				int32 j;
 				for (j=i+1; j<ntok; j++) {
 					if (toktyp[j] != SH_TOK_OTHER)
 							break;
